@@ -20,16 +20,19 @@ from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.plugins.lib import helpers
 
 
-class AVideoResolver(ResolveGeneric):
-    name = 'avideo'
-    domains = ['avideo.host']
-    pattern = r'(?://|\.)(avideo\.host)/(?:embed-|e/|d/|v/)?(\w+)'
+class XfreeHDResolver(ResolveGeneric):
+    name = 'xfreehd'
+    domains = ['xfreehd.com']
+    pattern = r'(?://|\.)(xfreehd\.com)/(?:embed|video)/(\d+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''sources:\s*\[(?:{src:)?\s*['"](?P<url>[^'"]+)''',
-                                               r'''file:\s*"(?:\[\w*\])?(?P<url>[^"]+)",'''],
+                                     patterns=[r'''source\s*src="(?P<url>[^"]+)"\s*title="(?P<label>[^"]+)'''],
                                      generic_patterns=False)
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}.html')
+        return self._default_get_url(host, media_id, template='https://www.{host}/embed/{media_id}')
+
+    @classmethod
+    def _is_enabled(cls):
+        return True

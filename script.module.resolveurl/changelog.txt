@@ -1,19 +1,23 @@
-Version 5.1.60 (February 5, 2022)
+Version 5.1.64 (April 10, 2022)
 - Code Base Changes:
-    - None
+    - Fix overlay progress dialog
+    - Remove certifi dependency
 
 - Resolvers Added:
-    - streamruby
-    - filesfm
-    - uploadever
+    - None
  
 - Resolvers Fixed/Updated:
-    - avideo
-    - entervideo
-    - streamingcommunity
+    - dood
+    - fastdrive
+    - fembed
+    - letsupload
+    - racaty
+    - realdebrid
+    - send
+    - streamruby
 
 - Resolvers Removed
-    - duckstream
+    - None
 
 - Languages Added/Updated
     - None

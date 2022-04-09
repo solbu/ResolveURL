@@ -16,28 +16,34 @@
     along with this program. If not, see <http://www.gnu.org/licenses/>.
 """
 
-import re
 from resolveurl import common
 from resolveurl.plugins.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class FilesFMResolver(ResolveUrl):
-    name = 'files.fm'
-    domains = ['files.fm', 'file.fm']
-    pattern = r'(?://|\.)(files?\.fm)/f/([0-9a-zA-Z]+)'
+class UploadRajaResolver(ResolveUrl):
+    name = 'uploadraja'
+    domains = ['uploadraja.com']
+    pattern = r'(?://|\.)(uploadraja\.com)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {'User-Agent': common.RAND_UA}
-        html = self.net.http_GET(web_url, headers=headers).content
-        server = re.search(r'var\s*arrFileHost\s*=\s*\["([^"]+)', html)
-        if server:
-            headers.update({'Referer': 'https://{}/'.format(host)})
-            return 'https://{}/down.php?i={}{}'.format(
-                server.group(1), media_id, helpers.append_headers(headers)
-            )
+        headers = {
+            'Origin': web_url.rsplit('/', 1)[0],
+            'Referer': web_url,
+            'User-Agent': common.RAND_UA
+        }
+        payload = {
+            'op': 'download2',
+            'id': media_id,
+            'rand': '',
+            'referer': 'https://{}/'.format(host)
+        }
+        url = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
+        if url != web_url:
+            return url.replace(' ', '%20') + helpers.append_headers(headers)
+
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/f/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
