@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -24,8 +24,8 @@ from resolveurl import common
 
 
 class VlalaNetResolver(ResolveUrl):
-    name = "VlalaNet"
-    domains = ["videoslala.net"]
+    name = 'VlalaNet'
+    domains = ['videoslala.net']
     pattern = r'(?://|\.)(videoslala\.net)/embed/([^\n]+)'
 
     def get_media_url(self, host, media_id):
@@ -39,6 +39,7 @@ class VlalaNetResolver(ResolveUrl):
             sources = json.loads(sources.group(1))
             sources = [(x.get('label'), x.get('file')) for x in sources]
             source = helpers.pick_source(sorted(sources, reverse=True))
+            headers.update({'verifypeer': 'false'})
             return source + helpers.append_headers(headers)
 
         raise ResolverError('No playable video found.')
@@ -46,4 +47,4 @@ class VlalaNetResolver(ResolveUrl):
     def get_url(self, host, media_id):
         if media_id.endswith('-mp4'):
             return self._default_get_url(host, media_id, template='https://cdn1.{host}/embed/{media_id}')
-        return self._default_get_url(host, media_id, template='https://{host}/embed/{media_id}')
+        return self._default_get_url(host, media_id, template='https://pro.{host}/embed/{media_id}')

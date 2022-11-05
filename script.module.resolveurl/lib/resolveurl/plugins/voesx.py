@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2020  gujal
+    Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,9 +24,22 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VoeResolver(ResolveUrl):
-    name = "Voe"
-    domains = ["voe.sx"]
-    pattern = r'(?://|\.)(voe\.sx)/(?:e/)?([0-9A-Za-z]+)'
+    name = 'Voe'
+    domains = ['voe.sx', 'voe-unblock.com', 'voe-unblock.net', 'voeunblock.com',
+               'voeunbl0ck.com', 'voeunblck.com', 'voeunblk.com', 'voe-un-block.com',
+               'voeun-block.net', 'un-block-voe.net', 'v-o-e-unblock.com',
+               'audaciousdefaulthouse.com', 'launchreliantcleaverriver.com',
+               'reputationsheriffkennethsand.com', 'fittingcentermondaysunday.com',
+               'housecardsummerbutton.com', 'fraudclatterflyingcar.com', 'bigclatterhomesguideservice.com', 'uptodatefinishconferenceroom.com',
+               'realfinanceblogcenter.com', 'tinycat-voe-fashion.com']
+    domains += ['voeunblock{}.com'.format(x) for x in range(1, 11)]
+    pattern = r'(?://|\.)((?:audaciousdefaulthouse|launchreliantcleaverriver|' \
+              r'reputationsheriffkennethsand|fittingcentermondaysunday|' \
+              r'housecardsummerbutton|fraudclatterflyingcar|' \
+              r'bigclatterhomesguideservice|uptodatefinishconferenceroom|' \
+              r'realfinanceblogcenter|tinycat-voe-fashion|' \
+              r'(?:v-?o-?e)?(?:-?un-?bl[o0]?c?k\d{0,2})?(?:-?voe)?)\.(?:sx|com|net))/' \
+              r'(?:e/)?([0-9A-Za-z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
@@ -40,7 +53,9 @@ class VoeResolver(ResolveUrl):
 
         sources = helpers.scrape_sources(
             html,
-            patterns=[r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
+            patterns=[r'''mp4["']:\s*["'](?P<url>[^"']+)["'],\s*["']video_height["']:\s*(?P<label>[^,]+)''',
+                      r'''hls':\s*'(?P<url>[^']+)''',
+                      r'''hls":\s*"(?P<url>[^"]+)",\s*"video_height":\s*(?P<label>[^,]+)'''],
             generic_patterns=False
         )
         if sources:

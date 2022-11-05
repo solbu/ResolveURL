@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2021 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -24,7 +24,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UpVideoResolver(ResolveUrl):
-    name = "UpVideo"
+    name = 'UpVideo'
     domains = ['upvideo.to', 'videoloca.xyz', 'tnaket.xyz', 'makaveli.xyz',
                'highload.to', 'embedo.co']
     pattern = r'(?://|\.)((?:upvideo|videoloca|makaveli|tnaket|highload|embedo)\.' \
@@ -45,9 +45,7 @@ class UpVideoResolver(ResolveUrl):
 
         aurl = 'https://{0}/assets/js/tabber.js'.format(host)
         ahtml = self.net.http_GET(aurl, headers=headers).content
-        if jsunhunt.detect(ahtml):
-            pass
-        else:
+        if not jsunhunt.detect(ahtml):
             aurl = 'https://{0}/assets/js/master.js'.format(host)
             ahtml = self.net.http_GET(aurl, headers=headers).content
 
@@ -61,7 +59,7 @@ class UpVideoResolver(ResolveUrl):
                 surl = r.group(1).replace(rep1, '')
                 surl = surl.replace(rep2, '')
                 surl = base64.b64decode(surl).decode('utf-8')
-                if host.split('.')[0] == 'embedo':
+                if host.split('.')[0] in ['embedo', 'highload']:
                     headers.update({'verifypeer': 'false'})
                 return surl.replace(' ', '%20') + helpers.append_headers(headers)
 

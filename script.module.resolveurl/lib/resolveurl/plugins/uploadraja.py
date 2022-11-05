@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2022 shellc0de
 
     This program is free software: you can redistribute it and/or modify
@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl import common
@@ -39,7 +39,7 @@ class UploadRajaResolver(ResolveUrl):
             'rand': '',
             'referer': 'https://{}/'.format(host)
         }
-        url = self.net.http_POST(web_url, form_data=payload, headers=headers).get_url()
+        url = helpers.get_redirect_url(web_url, headers=headers, form_data=payload)
         if url != web_url:
             return url.replace(' ', '%20') + helpers.append_headers(headers)
 

@@ -1,5 +1,5 @@
 """
-    plugin for ResolveURL
+    Plugin for ResolveURL
     Copyright (C) 2020 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -15,6 +15,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 import random
 import string
@@ -25,10 +26,10 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class DoodStreamResolver(ResolveUrl):
-    name = "DoodStream"
+    name = 'DoodStream'
     domains = ['dood.watch', 'doodstream.com', 'dood.to', 'dood.so', 'dood.cx', 'dood.la', 'dood.ws',
-               'dood.sh', 'doodstream.co', 'dood.pm']
-    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|ws|pm))/(?:d|e)/([0-9a-zA-Z]+)'
+               'dood.sh', 'doodstream.co', 'dood.pm', 'dood.wf', 'dood.re']
+    pattern = r'(?://|\.)(dood(?:stream)?\.(?:com?|watch|to|s[ho]|cx|la|w[sf]|pm|re))/(?:d|e)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         if host.endswith('.cx'):

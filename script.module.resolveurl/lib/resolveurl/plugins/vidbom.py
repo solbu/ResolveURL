@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    ResolveUrl site plugin
+    Plugin for ResolveURL
     Copyright (C) 2018 gujal
 
     This program is free software: you can redistribute it and/or modify
@@ -16,6 +16,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
+
 import re
 from resolveurl.lib import helpers, aadecode
 from resolveurl import common
@@ -23,11 +24,11 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VidBomResolver(ResolveUrl):
-    name = "VidBom"
-    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org',
-               'vadbom.com', 'vidbam.org', 'myviid.com', 'myviid.net', 'myvid.com', 'vidshare.com',
-               'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com', 'vidshar.org']
-    pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]dshar[er]?)\.(?:com|net|org))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
+    name = 'VidBom'
+    domains = ['vidbom.com', 'vidbem.com', 'vidbm.com', 'vedpom.com', 'vedbom.com', 'vedbom.org', 'vedbam.xyz',
+               'vadbom.com', 'vidbam.org', 'vadbam.com', 'myviid.com', 'myviid.net', 'myvid.com',
+               'vidshare.com', 'vedsharr.com', 'vedshar.com', 'vedshare.com', 'vadshar.com', 'vidshar.org']
+    pattern = r'(?://|\.)((?:v[aie]d[bp][aoe]?m|myvii?d|v[aei]dshar[er]?)\.(?:com|net|org|xyz))(?::\d+)?/(?:embed[/-])?([A-Za-z0-9]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)

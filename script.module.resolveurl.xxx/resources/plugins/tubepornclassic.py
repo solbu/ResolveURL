@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -49,7 +49,7 @@ class TubePornClassicResolver(ResolveUrl):
                 videourl = re.sub(r'/get_file/\d+/[0-9a-z]{32}/', replaceparts[0], videourl)
                 videourl += '&' if '?' in videourl else '?'
                 videourl += 'lip=' + replaceparts[1] + '&lt=' + replaceparts[2]
-                return self.net.http_GET(videourl, headers=headers).get_url() + helpers.append_headers(headers)
+                return helpers.get_redirect_url(videourl, headers=headers) + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 

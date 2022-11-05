@@ -19,7 +19,7 @@ import re
 import xbmcgui
 from resolveurl.lib import jsunpack
 import six
-from six.moves import urllib_parse, urllib_request
+from six.moves import urllib_parse, urllib_request, urllib_error
 from resolveurl import common
 from resolveurl.resolver import ResolverError
 
@@ -183,7 +183,7 @@ def scrape_sources(html, result_blacklist=None, scheme='http', patterns=None, ge
     return source_list
 
 
-def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True):
+def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=True, referer=True, redirect=True, verifypeer=True):
     if patterns is None:
         patterns = []
     scheme = urllib_parse.urlparse(url).scheme
@@ -201,7 +201,7 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
         headers.update({'Referer': referer})
     elif referer:
         headers.update({'Referer': rurl})
-    response = net.http_GET(url, headers=headers)
+    response = net.http_GET(url, headers=headers, redirect=redirect)
     response_headers = response.get_headers(as_dict=True)
     cookie = response_headers.get('Set-Cookie', None)
     if cookie:
@@ -209,6 +209,8 @@ def get_media_url(url, result_blacklist=None, patterns=None, generic_patterns=Tr
     html = response.content
     if not referer:
         headers.update({'Referer': rurl})
+    if not verifypeer:
+        headers.update({'verifypeer': 'false'})
     headers.update({'Origin': rurl[:-1]})
     source_list = scrape_sources(html, result_blacklist, scheme, patterns, generic_patterns)
     source = pick_source(source_list)
@@ -298,11 +300,24 @@ def fun_decode(vu, lc, hr='16'):
     return vu
 
 
-def get_redirect_url(url, headers={}):
-    request = urllib_request.Request(url, headers=headers)
-    request.get_method = lambda: 'HEAD'
-    response = urllib_request.urlopen(request)
-    return response.geturl()
+def get_redirect_url(url, headers={}, form_data=None):
+    class NoRedirection(urllib_request.HTTPRedirectHandler):
+        def redirect_request(self, req, fp, code, msg, headers, newurl):
+            return None
+
+    if form_data:
+        if isinstance(form_data, dict):
+            form_data = urllib_parse.urlencode(form_data)
+        request = urllib_request.Request(url, six.b(form_data), headers=headers)
+    else:
+        request = urllib_request.Request(url, headers=headers)
+
+    opener = urllib_request.build_opener(NoRedirection())
+    try:
+        response = opener.open(request, timeout=20)
+    except urllib_error.HTTPError as e:
+        response = e
+    return response.headers.get('location') or url
 
 
 def girc(page_data, url, co):

@@ -1,6 +1,6 @@
-'''
-    Plugin for ResolveUrl
-    Copyright (C) 2019
+"""
+    Plugin for ResolveURL
+    Copyright (C) 2022 gujal
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -14,22 +14,23 @@
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-'''
+"""
 
-from resolveurl.lib import helpers
 from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
+from resolveurl.lib import helpers
 
 
-class VideoZResolver(ResolveGeneric):
-    name = "VideoZ"
-    domains = ["videoz.me"]
-    pattern = r'(?://|\.)(videoz\.me)/(?:embed-)?([0-9a-zA-Z]+)'
+class VidzStoreResolver(ResolveGeneric):
+    name = 'VidzStore'
+    domains = ['vidzstore.com']
+    pattern = r'(?://|\.)(stream(?:[^.]*)\.vidzstore\.com)/video_emb\.php\?(.+)'
 
     def get_media_url(self, host, media_id):
-        return helpers.get_media_url(self.get_url(host, media_id),
-                                     patterns=[r'''file\s*:\s*["'](?P<url>[^"']+)'''],
-                                     generic_patterns=False,
-                                     result_blacklist=['dl']).replace(' ', '%20')
+        return helpers.get_media_url(
+            self.get_url(host, media_id),
+            patterns=[r"file:\s*'(?P<url>[^']+)"],
+            generic_patterns=False
+        )
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id)
+        return self._default_get_url(host, media_id, template='https://{host}/video_emb.php?{media_id}')

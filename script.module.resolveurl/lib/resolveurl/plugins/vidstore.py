@@ -1,6 +1,6 @@
 """
     Plugin for ResolveURL
-    Copyright (C) 2017  zlootec
+    Copyright (C) 2017 zlootec
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -23,8 +23,8 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class VidStoreResolver(ResolveUrl):
-    name = "VidStore"
-    domains = ["vidstore.me"]
+    name = 'VidStore'
+    domains = ['vidstore.me']
     pattern = r'(?://|\.)(vidstore\.me)/(.+)'
 
     def get_media_url(self, host, media_id):
@@ -39,7 +39,7 @@ class VidStoreResolver(ResolveUrl):
             sources = sorted(sources, key=lambda x: x[0], reverse=True)
             source = 'http://www.%s%s' % (host, helpers.pick_source(sources))
             headers['Referer'] = web_url
-            source = self.net.http_GET(source, headers=headers).get_url()
+            source = helpers.get_redirect_url(source, headers=headers)
             return source + helpers.append_headers(headers)
         raise ResolverError('File not found')
 

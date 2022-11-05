@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2021 shellc0de
 
     This program is free software: you can redistribute it and/or modify
@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -45,6 +45,7 @@ class UploadFlixResolver(ResolveUrl):
         html = self.net.http_POST(url, form_data=payload, headers=headers).content
         source = re.search(r'href="([^"]+)"\s*class="downloadbtn', html)
         if source:
+            headers['verifypeer'] = 'false'
             return source.group(1).replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')

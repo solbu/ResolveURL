@@ -1,19 +1,19 @@
 """
-Plugin for ResolveUrl
-Copyright (C) 2021 gujal
+    Plugin for ResolveURL
+    Copyright (C) 2021 gujal
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this program. If not, see <http://www.gnu.org/licenses/>.
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import re
@@ -23,7 +23,7 @@ from resolveurl.resolver import ResolveUrl, ResolverError
 
 
 class UserLoadResolver(ResolveUrl):
-    name = "UserLoad"
+    name = 'UserLoad'
     domains = ['userload.co']
     pattern = r'(?://|\.)(userload\.co)/(?:e|f|embed)/([0-9a-zA-Z]+)'
 
@@ -56,7 +56,8 @@ class UserLoadResolver(ResolveUrl):
                 stream_url = self.net.http_POST(api_url, data, headers=headers).content
                 headers.pop('X-Requested-With')
                 stream_url = helpers.get_redirect_url(stream_url, headers)
-                return stream_url + helpers.append_headers(headers)
+                headers.update({'verifypeer': 'false'})
+                return stream_url.replace(' ', '%20') + helpers.append_headers(headers)
 
         raise ResolverError('File not found')
 

@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2022 shellc0de
 
     This program is free software: you can redistribute it and/or modify
@@ -9,11 +9,11 @@
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with this program. If not, see <http://www.gnu.org/licenses/>.
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 from resolveurl import common
@@ -39,7 +39,7 @@ class UploadBazResolver(ResolveUrl):
         url = r.get_url()
         payload = helpers.get_hidden(html)
         headers.update({'Origin': web_url.rsplit('/', 1)[0], 'Referer': url})
-        surl = self.net.http_POST(url, form_data=payload, headers=headers).get_url()
+        surl = helpers.get_redirect_url(url, headers=headers, form_data=payload)
         if surl != url:
             headers.pop('Origin')
             headers.update({'verifypeer': 'false'})
