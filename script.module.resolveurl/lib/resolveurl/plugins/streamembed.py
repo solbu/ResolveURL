@@ -22,33 +22,27 @@ from resolveurl.lib import helpers
 from resolveurl.resolver import ResolveUrl, ResolverError
 
 
-class UploadingSiteResolver(ResolveUrl):
-    name = 'UploadingSite'
-    domains = ['uploadingsite.com']
-    pattern = r'(?://|\.)(uploadingsite\.com)/([0-9a-zA-Z]+)'
+class StreamEmbedResolver(ResolveUrl):
+    name = 'StreamEmbed'
+    domains = ['bullstream.xyz', 'mp4player.site']
+    pattern = r'(?://|\.)((?:bullstream|mp4player)\.(?:xyz|site))/watch\?v=([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         web_url = self.get_url(host, media_id)
-        headers = {
-            'Origin': web_url.rsplit('/', 1)[0],
-            'Referer': web_url,
-            'User-Agent': common.RAND_UA
-        }
-        payload = {
-            'op': 'download2',
-            'id': media_id,
-            'rand': '',
-            'referer': web_url,
-            'method_free': '',
-            'method_premium': ''
-        }
-        html = self.net.http_POST(web_url, form_data=payload, headers=headers).content
-        url = re.search(r'href="([^"]+).+?>\s*Download', html)
-        if url:
-            headers['verifypeer'] = 'false'
-            return url.group(1).replace(' ', '%20') + helpers.append_headers(headers)
+        headers = {'User-Agent': common.FF_USER_AGENT}
+        html = self.net.http_GET(web_url, headers=headers).content
+        data = re.search(r'sniff\("\w+","(\d+)","(\w+)"', html)
+        if data:
+            headers.update({'Accept': '*/*', 'Referer': web_url})
+            url = 'https://{}/m3u8/{}/{}/master.txt?s=1&cache=1'.format(
+                host, data.group(1), data.group(2)
+            )
+            html = self.net.http_GET(url, headers=headers).content
+            sources = re.findall(r'[A-Z]{10}=\d+x(?P<label>[\d]+)\s*(?P<url>[^\n]+)', html)
+            if sources:
+                return helpers.pick_source(helpers.sort_sources_list(sources)) + helpers.append_headers(headers)
 
         raise ResolverError('File Not Found or Removed')
 
     def get_url(self, host, media_id):
-        return self._default_get_url(host, media_id, template='https://{host}/{media_id}')
+        return self._default_get_url(host, media_id, template='https://{host}/watch?v={media_id}')

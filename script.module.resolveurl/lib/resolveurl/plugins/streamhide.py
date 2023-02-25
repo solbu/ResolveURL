@@ -1,5 +1,5 @@
 """
-    Plugin for ResolveUrl
+    Plugin for ResolveURL
     Copyright (C) 2022 shellc0de
 
     This program is free software: you can redistribute it and/or modify
@@ -16,15 +16,14 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 from resolveurl.lib import helpers
+from resolveurl.plugins.__resolve_generic__ import ResolveGeneric
 
 
-class FileMoonResolver(ResolveGeneric):
-    name = 'FileMoon'
-    domains = ['filemoon.sx', 'filemoon.to', 'filemoon.in', 'filemoon.link', 'filemoon.nl',
-               'filemoon.wf', 'cinegrab.com', 'filemoon.eu', 'filemoon.art']
-    pattern = r'(?://|\.)((?:filemoon|cinegrab)\.(?:sx|to|in|link|nl|wf|com|eu|art))/(?:e|d)/([0-9a-zA-Z]+)'
+class StreamHideResolver(ResolveGeneric):
+    name = 'StreamHide'
+    domains = ['streamhide.to']
+    pattern = r'(?://|\.)(streamhide\.to)/(?:e|d|w)/([0-9a-zA-Z]+)'
 
     def get_media_url(self, host, media_id):
         return helpers.get_media_url(
