@@ -1,18 +1,21 @@
-Version 5.1.93 (Feb 26, 2023)
+Version 5.1.95 (Mar 25, 2023)
 - Code Base Changes:
     - None
 
 - Resolvers Added:
-    - None
+    - upvid
 
 - Resolvers Fixed/Updated:
+    - aliez
+    - anonfiles
     - bannedvideo
+    - dembed
     - desiupload
-    - filemoon
-    - goload
-    - linkbox
-    - streamhide
+    - mixdrop
+    - streamembed
     - streamsb
+    - uploadever
+    - videoseyred
     - voesx
 
 - Resolvers Removed
